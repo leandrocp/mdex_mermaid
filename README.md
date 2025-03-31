@@ -10,6 +10,10 @@
 ## Usage
 
 ````elixir
+Mix.install([
+  {:mdex_mermaid, "~> 0.1"}
+])
+
 markdown = """
 # Flowchart
 
@@ -26,8 +30,25 @@ mdex =
   MDEx.new()
   |> MDExMermaid.attach()
 
-# format to HTML
 MDEx.to_html(mdex, document: document)
+#=>
+# <h1>Flowchart</h1>
+# <pre id="mermaid-1" class="mermaid" phx-update="ignore">graph TD;
+#     A-->B;
+#     A-->C;
+#     B-->D;
+#     C-->D;
+# </pre>
+# <script type="module">
+#   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+#
+#   const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+#
+#   mermaid.initialize({
+#     securityLevel: 'loose',
+#     theme: theme,
+#   });
+# </script>
 ````
 
 See [attach/2](https://hexdocs.pm/mdex_mermaid/MDExMermaid.html#attrach/2) for more info.

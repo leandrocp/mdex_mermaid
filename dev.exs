@@ -21,12 +21,8 @@ defmodule DemoLive do
 
     mdex = MDEx.new() |> MDExMermaid.attach()
     html = MDEx.to_html!(mdex, document: markdown)
-
     IO.puts(html)
-
-    html = {:safe, html}
-
-    {:ok, assign(socket, html: html)}
+    {:ok, assign(socket, html: {:safe, html})}
   end
 
   def render(assigns) do
@@ -42,4 +38,4 @@ defmodule DemoLive do
   end
 end
 
-PhoenixPlayground.start(live: DemoLive, open_browser: false)
+PhoenixPlayground.start(live: DemoLive, open_browser: true)
