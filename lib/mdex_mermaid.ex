@@ -19,11 +19,10 @@ defmodule MDExMermaid do
 
   ## Options
 
-    - `:mermaid_version` - The version of mermaid to use. Defaults to #{@default_version}
-    - `:mermaid_security_level` - The [security level](https://mermaid.js.org/config/usage.html#securitylevel) to use for the mermaid diagrams.
-      Defaults to "#{@default_security_level}"
+    - `:mermaid_version` (`t:String.t/0`. Defaults to "#{@default_version}") - The version of mermaid to use. 
+    - `:mermaid_security_level` (`t:String.t/0`. Defaults to "#{@default_security_level}") - The [security level](https://mermaid.js.org/config/usage.html#securitylevel) to use for the mermaid diagrams.
   """
-
+  @spec attach(Pipe.t(), keyword()) :: Pipe.t()
   def attach(pipe, options \\ []) do
     pipe
     |> Pipe.register_options([
