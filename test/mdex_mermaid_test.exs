@@ -47,14 +47,20 @@ defmodule MDExMermaidTest do
   end
 
   test "version", %{mdex: mdex} do
-    mdex = MDExMermaid.attach(mdex, version: "10")
+    mdex = MDExMermaid.attach(mdex, mermaid_version: "10")
     html = MDEx.to_html!(mdex)
     assert html =~ "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"
   end
 
   test "security level", %{mdex: mdex} do
-    mdex = MDExMermaid.attach(mdex, security_level: "strict")
+    mdex = MDExMermaid.attach(mdex, mermaid_security_level: "strict")
     html = MDEx.to_html!(mdex)
     assert html =~ "securityLevel: 'strict'"
+  end
+
+  test "merge options", %{mdex: mdex} do
+    mdex = MDExMermaid.attach(mdex, mermaid_version: "strict", document: "# Other")
+    html = MDEx.to_html!(mdex)
+    assert html =~ "<h1>Other</h1>"
   end
 end

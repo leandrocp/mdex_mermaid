@@ -19,8 +19,8 @@ defmodule MDExMermaid do
 
   ## Options
 
-    - `:version` - The version of mermaid to use. Defaults to #{@default_version}
-    - `:security_level` - The [security level](https://mermaid.js.org/config/usage.html#securitylevel) to use for the mermaid diagrams.
+    - `:mermaid_version` - The version of mermaid to use. Defaults to #{@default_version}
+    - `:mermaid_security_level` - The [security level](https://mermaid.js.org/config/usage.html#securitylevel) to use for the mermaid diagrams.
       Defaults to "#{@default_security_level}"
   """
 
@@ -30,10 +30,7 @@ defmodule MDExMermaid do
       :mermaid_version,
       :mermaid_security_level
     ])
-    |> Pipe.put_options(
-      mermaid_version: options[:version],
-      mermaid_security_level: options[:security_level]
-    )
+    |> Pipe.put_options(options)
     |> Pipe.append_steps(enable_unsafe: &enable_unsafe/1)
     |> Pipe.append_steps(inject_script: &inject_script/1)
     |> Pipe.append_steps(update_code_blocks: &update_code_blocks/1)
