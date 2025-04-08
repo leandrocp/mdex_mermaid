@@ -26,11 +26,9 @@ graph TD;
 ```
 """
 
-mdex =
-  MDEx.new()
-  |> MDExMermaid.attach()
+mdex = MDEx.new() |> MDExMermaid.attach()
 
-MDEx.to_html!(mdex, document: document)
+MDEx.to_html!(mdex, document: markdown) |> IO.puts()
 #=>
 # <h1>Flowchart</h1>
 # <pre id="mermaid-1" class="mermaid" phx-update="ignore">graph TD;
