@@ -23,6 +23,11 @@ defmodule MDExMermaidTest do
 
     expected =
       """
+      <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+        mermaid.initialize({securityLevel: 'loose', theme: theme});
+      </script>
       <h1>Flowchart</h1>
       <pre id="mermaid-1" class="mermaid" phx-update="ignore">graph TD;
           A-->B;
@@ -30,37 +35,21 @@ defmodule MDExMermaidTest do
           B-->D;
           C-->D;
       </pre>
-      <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-
-        const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
-
-        mermaid.initialize({
-          securityLevel: 'loose',
-          theme: theme,
-        });
-      </script>
       """
       |> String.trim()
 
     assert html == expected
   end
 
-  test "version", %{mdex: mdex} do
-    mdex = MDExMermaid.attach(mdex, mermaid_version: "10")
+  test "custom init", %{mdex: mdex} do
+    mdex = MDExMermaid.attach(mdex, mermaid_init: "<script>console.log('__test__')</script>")
     html = MDEx.to_html!(mdex)
-    assert html =~ "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"
-  end
-
-  test "security level", %{mdex: mdex} do
-    mdex = MDExMermaid.attach(mdex, mermaid_security_level: "strict")
-    html = MDEx.to_html!(mdex)
-    assert html =~ "securityLevel: 'strict'"
+    assert html =~ "__test__"
   end
 
   test "merge options", %{mdex: mdex} do
-    mdex = MDExMermaid.attach(mdex, mermaid_version: "strict", document: "# Other")
+    mdex = MDExMermaid.attach(mdex, mermaid_init: "__test__", document: "# Other")
     html = MDEx.to_html!(mdex)
-    assert html =~ "<h1>Other</h1>"
+    assert html == "__test__\n<h1>Other</h1>"
   end
 end
