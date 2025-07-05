@@ -75,8 +75,7 @@ defmodule MDExMermaid.MixProject do
 
   defp aliases do
     [
-      setup: ["deps.get", "compile"],
-      dev: ["cmd iex dev.exs"]
+      setup: ["deps.get", "compile"]
     ]
   end
 end

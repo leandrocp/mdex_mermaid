@@ -21,3 +21,4 @@ mdex_mermaid-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+/examples/index.html
