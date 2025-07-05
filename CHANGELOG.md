@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Breaking Changes
+- Remove option `:mermaid_version` in favor of `:mermaid_init`
+- Remove option `:mermaid_security_level` in favor of `:mermaid_init`
+
+### Features
+- Add customizable attributes for mermaid `<pre>` tags via `:mermaid_pre_attrs` option
+- Add customizable initialization script via `:mermaid_init` option
+
 ## 0.2.0 (2025-04-08)
 
 ### Breaking Changes
