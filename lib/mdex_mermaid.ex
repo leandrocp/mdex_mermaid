@@ -80,7 +80,7 @@ defmodule MDExMermaid do
 
   ## Phoenix LiveView
 
-  To use MDExMermaid with Phoenix LiveView, you'll need to:
+  To use MDExMermaid with Phoenix LiveView, you can:
 
   1. Load Mermaid (via CDN or npm)
   2. Create a LiveView hook to render diagrams
@@ -93,7 +93,8 @@ defmodule MDExMermaid do
   ```html
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' });
+    const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+    mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: theme });
     window.mermaid = mermaid;
   </script>
   ```
@@ -111,18 +112,18 @@ defmodule MDExMermaid do
   ```javascript
   import mermaid from 'mermaid'
 
+  const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
+
   mermaid.initialize({ 
     startOnLoad: false, 
     securityLevel: 'loose',
-    theme: 'default'
+    theme: theme,
   })
 
   let hooks = {
     MermaidHook: {
       mounted() {
-        const element = this.el;
         mermaid.run({
-          nodes: [element],
           querySelector: '.mermaid'
         });
       }
@@ -135,7 +136,7 @@ defmodule MDExMermaid do
   ### Using in LiveView
 
   ```elixir
-  mdex =
+  html =
     MDEx.new()
     |> MDExMermaid.attach(
       mermaid_init: "", # already initialized
@@ -143,14 +144,14 @@ defmodule MDExMermaid do
         ~s(id="mermaid-\#\{seq\}" class="mermaid" phx-hook="MermaidHook" phx-update="ignore")
       end
     )
-
-  html = MDEx.to_html!(mdex, document: markdown)
+    |> MDEx.to_html!(document: markdown)
 
   assign(socket, html: {:safe, html})}
   ```
 
-  The `phx-hook="MermaidHook"` attribute connects the diagram to your JavaScript hook, and `phx-update="ignore"` prevents LiveView from re-rendering the diagram on updates.
+  Note that you can attach a JS hook per diagram or in a parent element to handle all diagrams at once, depending on your needs.
 
+  See this [LiveView example](https://github.com/leandrocp/mdex_mermaid/blob/main/examples/live_view.exs)
   """
   @spec attach(Pipe.t(), keyword()) :: Pipe.t()
   def attach(pipe, options \\ []) do
