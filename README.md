@@ -44,4 +44,4 @@ MDEx.to_html!(mdex, document: markdown) |> IO.puts()
 # </pre>
 ````
 
-See [attach/2](https://hexdocs.pm/mdex_mermaid/MDExMermaid.html#attrach/2) for more info.
+See [attach/2](https://hexdocs.pm/mdex_mermaid/MDExMermaid.html#attach/2) for more info.
