@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 - 2025-07-07
 
 ### Changed
 - **Breaking:** Remove option `:mermaid_version` in favor of `:mermaid_init`
