@@ -6,7 +6,7 @@ defmodule MDExMermaid do
              |> String.split("<!-- MDOC -->")
              |> Enum.fetch!(1)
 
-  alias MDEx.Pipe
+  alias MDEx.Document
 
   @default_init """
   <script type="module">
@@ -19,7 +19,7 @@ defmodule MDExMermaid do
   @type mermaid_pre_attrs :: (seq :: pos_integer() -> String.t())
 
   @doc """
-  Attaches the MDExMermaid plugin into the MDEx pipeline.
+  Attaches the MDExMermaid plugin into the MDEx document.
 
   - Mermaid is loaded from https://www.jsdelivr.com/package/npm/mermaid
   - Theme is determined by the user's `prefers-color-scheme` system preference
@@ -137,14 +137,14 @@ defmodule MDExMermaid do
 
   ```elixir
   html =
-    MDEx.new()
+    MDEx.new(markdown: markdown)
     |> MDExMermaid.attach(
       mermaid_init: "", # already initialized
       mermaid_pre_attrs: fn seq ->
         ~s(id="mermaid-\#\{seq\}" class="mermaid" phx-hook="MermaidHook" phx-update="ignore")
       end
     )
-    |> MDEx.to_html!(document: markdown)
+    |> MDEx.to_html!()
 
   assign(socket, html: {:safe, html})}
   ```
@@ -153,37 +153,37 @@ defmodule MDExMermaid do
 
   See this [LiveView example](https://github.com/leandrocp/mdex_mermaid/blob/main/examples/live_view.exs)
   """
-  @spec attach(Pipe.t(), keyword()) :: Pipe.t()
-  def attach(pipe, options \\ []) do
-    pipe
-    |> Pipe.register_options([
+  @spec attach(Document.t(), keyword()) :: Document.t()
+  def attach(document, options \\ []) do
+    document
+    |> Document.register_options([
       :mermaid_init,
       :mermaid_pre_attrs
     ])
-    |> Pipe.put_options(options)
-    |> Pipe.append_steps(enable_unsafe: &enable_unsafe/1)
-    |> Pipe.append_steps(inject_init: &inject_init/1)
-    |> Pipe.append_steps(update_code_blocks: &update_code_blocks/1)
+    |> Document.put_options(options)
+    |> Document.append_steps(enable_unsafe: &enable_unsafe/1)
+    |> Document.append_steps(inject_init: &inject_init/1)
+    |> Document.append_steps(update_code_blocks: &update_code_blocks/1)
   end
 
-  defp enable_unsafe(pipe) do
-    Pipe.put_render_options(pipe, unsafe: true)
+  defp enable_unsafe(document) do
+    Document.put_render_options(document, unsafe: true)
   end
 
-  defp inject_init(pipe) do
-    init = Pipe.get_option(pipe, :mermaid_init) || @default_init
-    Pipe.put_node_in_document_root(pipe, %MDEx.HtmlBlock{literal: init}, :top)
+  defp inject_init(document) do
+    init = Document.get_option(document, :mermaid_init) || @default_init
+    Document.put_node_in_document_root(document, %MDEx.HtmlBlock{literal: init}, :top)
   end
 
-  defp update_code_blocks(pipe) do
+  defp update_code_blocks(document) do
     pre_attrs =
-      Pipe.get_option(pipe, :mermaid_pre_attrs) ||
+      Document.get_option(document, :mermaid_pre_attrs) ||
         fn seq ->
           ~s(id="mermaid-#{seq}" class="mermaid" phx-update="ignore")
         end
 
     {document, _} =
-      MDEx.traverse_and_update(pipe.document, 1, fn
+      MDEx.traverse_and_update(document, 1, fn
         %MDEx.CodeBlock{info: "mermaid"} = node, acc ->
           pre = "<pre #{pre_attrs.(acc)}>#{node.literal}</pre>"
           node = %MDEx.HtmlBlock{literal: pre, nodes: node.nodes}
@@ -193,6 +193,6 @@ defmodule MDExMermaid do
           {node, acc}
       end)
 
-    %{pipe | document: document}
+    document
   end
 end

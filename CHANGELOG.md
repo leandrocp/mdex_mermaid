@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+- Support MDEx v0.9
+
 ## 0.3.0 - 2025-07-07
 
 ### Changed
