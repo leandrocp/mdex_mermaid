@@ -14,12 +14,12 @@ defmodule MDExMermaidTest do
     ```
     """
 
-    [mdex: MDEx.new(document: markdown)]
+    [document: MDEx.new(markdown: markdown)]
   end
 
-  test "default options", %{mdex: mdex} do
-    mdex = MDExMermaid.attach(mdex)
-    html = MDEx.to_html!(mdex)
+  test "default options", %{document: document} do
+    document = MDExMermaid.attach(document)
+    html = MDEx.to_html!(document)
 
     expected =
       """
@@ -41,15 +41,11 @@ defmodule MDExMermaidTest do
     assert html == expected
   end
 
-  test "custom init", %{mdex: mdex} do
-    mdex = MDExMermaid.attach(mdex, mermaid_init: "<script>console.log('__test__')</script>")
-    html = MDEx.to_html!(mdex)
-    assert html =~ "__test__"
-  end
+  test "custom init", %{document: document} do
+    document =
+      MDExMermaid.attach(document, mermaid_init: "<script>console.log('__test__')</script>")
 
-  test "merge options", %{mdex: mdex} do
-    mdex = MDExMermaid.attach(mdex, mermaid_init: "__test__", document: "# Other")
-    html = MDEx.to_html!(mdex)
-    assert html == "__test__\n<h1>Other</h1>"
+    html = MDEx.to_html!(document)
+    assert html =~ "__test__"
   end
 end

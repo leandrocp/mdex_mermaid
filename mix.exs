@@ -2,7 +2,7 @@ defmodule MDExMermaid.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/leandrocp/mdex_mermaid"
-  @version "0.3.0"
+  @version "0.3.1-dev"
 
   def project do
     [
@@ -65,7 +65,7 @@ defmodule MDExMermaid.MixProject do
 
   defp deps do
     [
-      {:mdex, "~> 0.5"},
+      {:mdex, "~> 0.9"},
       {:ex_doc, ">= 0.0.0", only: :docs},
       {:makeup_elixir, "~> 1.0", only: :docs},
       {:makeup_eex, "~> 2.0", only: :docs},
