@@ -26,9 +26,9 @@ graph TD;
 ```
 """
 
-mdex = MDEx.new() |> MDExMermaid.attach()
+mdex = MDEx.new(markdown: markdown) |> MDExMermaid.attach()
 
-MDEx.to_html!(mdex, document: markdown) |> IO.puts()
+MDEx.to_html!(mdex) |> IO.puts()
 #=>
 # <script type="module">
 #   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';

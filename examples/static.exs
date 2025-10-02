@@ -23,6 +23,6 @@ quadrantChart
 ```
 """
 
-mdex = MDEx.new() |> MDExMermaid.attach()
-html = MDEx.to_html!(mdex, document: markdown)
+mdex = MDEx.new(markdown: markdown) |> MDExMermaid.attach()
+html = MDEx.to_html!(mdex)
 File.write!("index.html", html)
