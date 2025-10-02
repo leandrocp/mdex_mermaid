@@ -102,7 +102,7 @@ defmodule MindmapLive do
     """
 
     mdex =
-      MDEx.new()
+      MDEx.new(markdown: markdown)
       |> MDExMermaid.attach(
         mermaid_init: "",
         mermaid_pre_attrs: fn seq ->
@@ -110,8 +110,12 @@ defmodule MindmapLive do
         end
       )
 
-    html = MDEx.to_html!(mdex, document: markdown)
+    html = MDEx.to_html!(mdex)
     {:ok, assign(socket, html: {:safe, html})}
+  end
+
+  def handle_params(_params, _uri, socket) do
+    {:noreply, socket}
   end
 
   def render(assigns) do
@@ -125,8 +129,8 @@ defmodule MindmapLive do
           <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
               <div class="flex space-x-4">
-                <.link patch="/mindmaps" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">
-                  Mindmaps
+                <.link patch="/mindmap" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">
+                  Mindmap
                 </.link>
                 <.link patch="/gantt" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">
                   Gantt Chart
@@ -155,6 +159,10 @@ defmodule GanttLive do
     |> then(&{:ok, &1})
   end
 
+  def handle_params(_params, _uri, socket) do
+    {:noreply, socket}
+  end
+
   defp example_1 do
     example_1 = """
     # Gantt Chart - Example 1
@@ -172,14 +180,14 @@ defmodule GanttLive do
     ```
     """
 
-    MDEx.new()
+    MDEx.new(markdown: example_1)
     |> MDExMermaid.attach(
       mermaid_init: "",
       mermaid_pre_attrs: fn seq ->
         ~s(id="mermaid-#{seq}" class="mermaid")
       end
     )
-    |> MDEx.to_html!(document: example_1)
+    |> MDEx.to_html!()
   end
 
   defp example_2 do
@@ -220,14 +228,14 @@ defmodule GanttLive do
     ```
     """
 
-    MDEx.new()
+    MDEx.new(markdown: example_2)
     |> MDExMermaid.attach(
       mermaid_init: "",
       mermaid_pre_attrs: fn seq ->
         ~s(id="mermaid-#{seq}" class="mermaid")
       end
     )
-    |> MDEx.to_html!(document: example_2)
+    |> MDEx.to_html!()
   end
 
   def handle_event("show_example_1", _params, socket) do
@@ -254,8 +262,8 @@ defmodule GanttLive do
           <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
               <div class="flex space-x-4">
-                <.link patch="/mindmaps" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">
-                  Mindmaps
+                <.link patch="/mindmap" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">
+                  Mindmap
                 </.link>
                 <.link patch="/gantt" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">
                   Gantt Chart
@@ -329,7 +337,7 @@ defmodule DemoRouter do
   scope "/" do
     pipe_through(:browser)
     live("/", DemoLive)
-    live("/mindmaps", MindmapLive)
+    live("/mindmap", MindmapLive)
     live("/gantt", GanttLive)
   end
 end

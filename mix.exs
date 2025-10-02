@@ -2,7 +2,7 @@ defmodule MDExMermaid.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/leandrocp/mdex_mermaid"
-  @version "0.3.1"
+  @version "0.3.2-dev"
 
   def project do
     [
@@ -65,12 +65,20 @@ defmodule MDExMermaid.MixProject do
 
   defp deps do
     [
-      {:mdex, "~> 0.9"},
+      mdex_dep(),
       {:ex_doc, ">= 0.0.0", only: :docs},
       {:makeup_elixir, "~> 1.0", only: :docs},
       {:makeup_eex, "~> 2.0", only: :docs},
       {:makeup_syntect, "~> 0.1", only: :docs}
     ]
+  end
+
+  defp mdex_dep do
+    if path = System.get_env("MDEX_PATH") do
+      {:mdex, path: path}
+    else
+      {:mdex, "~> 0.9"}
+    end
   end
 
   defp aliases do
