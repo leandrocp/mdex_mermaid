@@ -1,6 +1,6 @@
 # MDExMermaid Usage Rules
 
-MDExMermaid is a plugin for [MDEx](https://mdelixir.dev) that enables rendering [Mermaid](https://mermaid.js.org) diagrams from markdown code blocks.
+MDExMermaid is a plugin for [MDEx](https://hex.pm/packages/mdex) that enables rendering [Mermaid](https://mermaid.js.org) diagrams from markdown code blocks.
 
 ## When to Use
 
@@ -16,7 +16,7 @@ Use MDExMermaid when you need to:
 
 The main function is `MDExMermaid.attach/2` which attaches the plugin to an MDEx document:
 
-```elixir
+````elixir
 markdown = """
 ```mermaid
 graph TD;
@@ -26,7 +26,7 @@ graph TD;
 
 mdex = MDEx.new(markdown: markdown) |> MDExMermaid.attach()
 html = MDEx.to_html!(mdex)
-```
+````
 
 ### Function Signature
 
