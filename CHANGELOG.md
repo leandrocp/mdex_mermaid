@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.4 - 2026-01-09
+
+### Changed
+- Depend on MDEx >= 0.9.0
+
 ## 0.3.3 - 2025-10-09
 
 ### Changed
