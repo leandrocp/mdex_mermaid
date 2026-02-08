@@ -148,4 +148,22 @@ defmodule MDExMermaidTest do
     refute html =~ "import mermaid from"
     refute html =~ ~s(phx-update="ignore")
   end
+
+  test "no init script when no mermaid blocks" do
+    markdown = """
+    # Regular Markdown
+
+    ```elixir
+    IO.puts("hello")
+    ```
+    """
+
+    html =
+      MDEx.new(markdown: markdown)
+      |> MDExMermaid.attach()
+      |> MDEx.to_html!()
+
+    refute html =~ "<script"
+    refute html =~ "mermaid"
+  end
 end

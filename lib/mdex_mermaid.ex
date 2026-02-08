@@ -162,8 +162,8 @@ defmodule MDExMermaid do
     ])
     |> Document.put_options(options)
     |> Document.append_steps(enable_unsafe: &enable_unsafe/1)
-    |> Document.append_steps(inject_init: &inject_init/1)
     |> Document.append_steps(update_code_blocks: &update_code_blocks/1)
+    |> Document.append_steps(inject_init: &inject_init/1)
   end
 
   defp enable_unsafe(document) do
@@ -171,8 +171,12 @@ defmodule MDExMermaid do
   end
 
   defp inject_init(document) do
-    init = Document.get_option(document, :mermaid_init) || @default_init
-    Document.put_node_in_document_root(document, %MDEx.HtmlBlock{literal: init}, :top)
+    if Document.get_private(document, :has_mermaid, false) do
+      init = Document.get_option(document, :mermaid_init) || @default_init
+      Document.put_node_in_document_root(document, %MDEx.HtmlBlock{literal: init}, :top)
+    else
+      document
+    end
   end
 
   defp update_code_blocks(document) do
@@ -182,7 +186,7 @@ defmodule MDExMermaid do
           ~s(id="mermaid-#{seq}" class="mermaid" phx-update="ignore")
         end
 
-    {document, _} =
+    {document, seq} =
       MDEx.traverse_and_update(document, 1, fn
         %MDEx.CodeBlock{info: "mermaid"} = node, acc ->
           pre = "<pre #{pre_attrs.(acc)}>#{node.literal}</pre>"
@@ -193,6 +197,6 @@ defmodule MDExMermaid do
           {node, acc}
       end)
 
-    document
+    Document.put_private(document, :has_mermaid, seq > 1)
   end
 end
