@@ -2,7 +2,7 @@ defmodule MDExMermaid.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/leandrocp/mdex_mermaid"
-  @version "0.3.4"
+  @version "0.3.5"
 
   def project do
     [

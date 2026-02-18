@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.5 - 2026-02-18
+
+### Fixed
+- Conditionally inject the mermaid script only when code blocks exist (@halostatue)
+
 ## 0.3.4 - 2026-01-09
 
 ### Changed
