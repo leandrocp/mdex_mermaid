@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.5](https://github.com/leandrocp/mdex_mermaid/compare/v0.3.4...v0.3.5) (2026-06-19)
+
+
+### Features
+
+* Conditionally inject Mermaid initialization ([5462380](https://github.com/leandrocp/mdex_mermaid/commit/5462380dcc1334f86057d24fd60670bc475cc77a)) by @halostatue
+
 ## 0.3.5 - 2026-02-18
 
 ### Fixed
