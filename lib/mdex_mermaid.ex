@@ -73,6 +73,7 @@ defmodule MDExMermaid do
         document.addEventListener("DOMContentLoaded", () => {
           const theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "default";
           mermaid.initialize({securityLevel: "loose", theme: theme});
+        });
       </script>
       \"\"\"
 
@@ -114,8 +115,8 @@ defmodule MDExMermaid do
 
   const theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default';
 
-  mermaid.initialize({ 
-    startOnLoad: false, 
+  mermaid.initialize({
+    startOnLoad: false,
     securityLevel: 'loose',
     theme: theme,
   })
@@ -146,7 +147,7 @@ defmodule MDExMermaid do
     )
     |> MDEx.to_html!()
 
-  assign(socket, html: {:safe, html})}
+  assign(socket, html: {:safe, html})
   ```
 
   Note that you can attach a JS hook per diagram or in a parent element to handle all diagrams at once, depending on your needs.
