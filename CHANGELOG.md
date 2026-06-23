@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.6](https://github.com/leandrocp/mdex_mermaid/compare/v0.3.5...v0.3.6) (2026-06-23)
+
+
+### Bug Fixes
+
+* snippet docs ([#44](https://github.com/leandrocp/mdex_mermaid/issues/44)) by @AlexGx ([31c3f99](https://github.com/leandrocp/mdex_mermaid/commit/31c3f99006b43c8b0096bbd7140b7f8d0f3db568))
+
 ## [0.3.5](https://github.com/leandrocp/mdex_mermaid/compare/v0.3.4...v0.3.5) (2026-06-19)
 
 
