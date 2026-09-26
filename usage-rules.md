@@ -61,7 +61,7 @@ When you call `MDExMermaid.attach()` with no options, the following happens auto
 2. **Each diagram gets these attributes**: `id="mermaid-{seq}" class="mermaid" phx-update="ignore"`
 3. **Dark mode auto-detection** via `prefers-color-scheme` media query
 4. **Security level** is set to `'loose'`
-5. **HTML unsafe mode is enabled** in MDEx (allows raw HTML injection)
+5. **The plugin's own markup is emitted as `%MDEx.Raw{}`**, which MDEx renders without `render: [unsafe: true]`
 6. **Sequence numbering** starts at 1 and increments (e.g., "mermaid-1", "mermaid-2", etc.)
 
 ### Default `:mermaid_init` Value
@@ -451,13 +451,17 @@ mermaid.initialize({ securityLevel: 'strict' })
 
 Use `'loose'` for most applications. Use `'strict'` only if you're rendering untrusted user-submitted content.
 
-### 6. Understand unsafe: true Implication
+### 6. Understand How the Plugin Emits HTML
 
-MDExMermaid automatically enables `unsafe: true` in MDEx rendering options. This allows raw HTML injection, which is necessary for inserting `<pre>` tags but also means:
+MDExMermaid emits its `<script>` and `<pre>` tags as `%MDEx.Raw{}` nodes, which MDEx renders
+without `render: [unsafe: true]`. This means:
 
-- Any HTML in your markdown will be rendered directly
-- Ensure you trust the markdown source
-- Sanitize user input if rendering user-submitted markdown
+- The plugin does not change how MDEx treats HTML written in your Markdown source. That HTML
+  stays omitted by default, and rendering it is your decision via `render: [unsafe: true]`
+- The diagram source is HTML-escaped before it is placed in the `<pre>`. Mermaid decodes
+  entities before parsing, so this does not change the rendered diagram
+- Passing `sanitize:` cleans the plugin's markup too, which strips the `<script>` and the
+  `id` and `phx-update` attributes the diagrams need
 
 ---
 
@@ -675,4 +679,5 @@ See the [examples directory](https://github.com/leandrocp/mdex_mermaid/tree/main
 4. **Always use unique IDs**: The `seq` parameter is your friend
 5. **Choose one init method**: Plugin auto-inject OR manual in layout
 6. **Use defensive matchMedia check**: `window.matchMedia &&` prevents errors
-7. **unsafe: true is automatic**: Be aware of security implications
+7. **The plugin emits `%MDEx.Raw{}`**: No `render: [unsafe: true]` needed, and HTML in your
+   Markdown source keeps MDEx's default treatment
