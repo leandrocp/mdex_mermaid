@@ -30,15 +30,56 @@ defmodule MDExMermaidTest do
       </script>
       <h1>Flowchart</h1>
       <pre id="mermaid-1" class="mermaid" phx-update="ignore">graph TD;
-          A-->B;
-          A-->C;
-          B-->D;
-          C-->D;
+          A--&gt;B;
+          A--&gt;C;
+          B--&gt;D;
+          C--&gt;D;
       </pre>
       """
       |> String.trim()
 
     assert html == expected
+  end
+
+  test "renders without render: [unsafe: true]", %{document: document} do
+    html = document |> MDExMermaid.attach() |> MDEx.to_html!(render: [unsafe: false])
+
+    assert html =~ "import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid"
+    assert html =~ ~s(<pre id="mermaid-1" class="mermaid" phx-update="ignore">)
+  end
+
+  test "keeps raw HTML in the Markdown source omitted" do
+    markdown = """
+    <p>raw html</p>
+
+    ```mermaid
+    graph TD;
+        A-->B;
+    ```
+    """
+
+    html = MDEx.new(markdown: markdown) |> MDExMermaid.attach() |> MDEx.to_html!()
+
+    assert html =~ "<!-- raw HTML omitted -->"
+    refute html =~ "<p>raw html</p>"
+    assert html =~ ~s(<pre id="mermaid-1" class="mermaid" phx-update="ignore">)
+  end
+
+  test "escapes the diagram source" do
+    markdown = """
+    ```mermaid
+    graph TD;
+        A-->B</pre><script>alert('x')</script>
+    ```
+    """
+
+    html =
+      MDEx.new(markdown: markdown)
+      |> MDExMermaid.attach(mermaid_init: "")
+      |> MDEx.to_html!()
+
+    assert html =~ "&lt;/pre&gt;&lt;script&gt;alert(&#39;x&#39;)&lt;/script&gt;"
+    refute html =~ "<script>alert('x')</script>"
   end
 
   test "custom init", %{document: document} do

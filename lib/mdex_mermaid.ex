@@ -162,19 +162,14 @@ defmodule MDExMermaid do
       :mermaid_pre_attrs
     ])
     |> Document.put_options(options)
-    |> Document.append_steps(enable_unsafe: &enable_unsafe/1)
     |> Document.append_steps(update_code_blocks: &update_code_blocks/1)
     |> Document.append_steps(inject_init: &inject_init/1)
-  end
-
-  defp enable_unsafe(document) do
-    Document.put_render_options(document, unsafe: true)
   end
 
   defp inject_init(document) do
     if Document.get_private(document, :has_mermaid, false) do
       init = Document.get_option(document, :mermaid_init) || @default_init
-      Document.put_node_in_document_root(document, %MDEx.HtmlBlock{literal: init}, :top)
+      Document.put_node_in_document_root(document, %MDEx.Raw{literal: init}, :top)
     else
       document
     end
@@ -190,8 +185,8 @@ defmodule MDExMermaid do
     {document, seq} =
       MDEx.traverse_and_update(document, 1, fn
         %MDEx.CodeBlock{info: "mermaid"} = node, acc ->
-          pre = "<pre #{pre_attrs.(acc)}>#{node.literal}</pre>"
-          node = %MDEx.HtmlBlock{literal: pre, nodes: node.nodes}
+          pre = "<pre #{pre_attrs.(acc)}>#{escape_html(node.literal)}</pre>"
+          node = %MDEx.Raw{literal: pre}
           {node, acc + 1}
 
         node, acc ->
@@ -199,5 +194,16 @@ defmodule MDExMermaid do
       end)
 
     Document.put_private(document, :has_mermaid, seq > 1)
+  end
+
+  # The diagram comes from the Markdown source, so it cannot be interpolated as is.
+  # Mermaid decodes entities before parsing, so escaping does not change the diagram.
+  defp escape_html(text) do
+    text
+    |> String.replace("&", "&amp;")
+    |> String.replace("<", "&lt;")
+    |> String.replace(">", "&gt;")
+    |> String.replace("\"", "&quot;")
+    |> String.replace("'", "&#39;")
   end
 end
