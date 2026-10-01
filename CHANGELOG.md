@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0](https://github.com/leandrocp/mdex_mermaid/compare/v0.3.6...v0.4.0) (2026-10-01)
+
+### Features
+
+- **Breaking:** Emit plugin markup as MDEx.Raw nodes by @leandrocp in [#52](https://github.com/leandrocp/mdex_mermaid/pull/52)
+
 ## [0.3.6](https://github.com/leandrocp/mdex_mermaid/compare/v0.3.5...v0.3.6) (2026-06-23)
 
 
